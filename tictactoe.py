@@ -7,7 +7,7 @@ import math
 X = "X"
 O = "O"
 EMPTY = None
-
+# Initialing the game variables
 
 def initial_state():
     """
@@ -16,14 +16,21 @@ def initial_state():
     return [[EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY]]
-
+# Initialing the board as empty
 
 def player(board):
     """
     Returns player who has the next turn on a board.
     """
-    raise NotImplementedError
-
+    for i in board :
+        for j in board[i] :
+            if board[i][j] == X :
+                        x_counter += 1
+            elif board[i][j] == O :
+                        o_counter += 1
+    if x_counter == o_counter == 0 :
+         return X
+    return max(x_counter, o_counter)
 
 def actions(board):
     """
