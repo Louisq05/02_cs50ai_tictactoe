@@ -5,11 +5,12 @@ Tic Tac Toe Player
 import math
 import copy
 
+# Initialing the game variables
 X = "X"
 O = "O"
 EMPTY = None
-# Initialing the game variables
 
+# Initialing the board as empty
 def initial_state():
     """
     Returns starting state of the board.
@@ -17,7 +18,6 @@ def initial_state():
     return [[EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY]]
-# Initialing the board as empty
 
 def player(board):
     """
@@ -26,15 +26,15 @@ def player(board):
     x_counter = 0
     o_counter = 0
 
-    for row in board :
+    for row in board :                       # Counts the numer of symbols on the board
         for col in board[row] :
             if board[row][col] == X :
                         x_counter += 1
             elif board[row][col] == O :
                         o_counter += 1
-    if x_counter == o_counter == 0 :
+    if x_counter == o_counter :              # If == 0 or same number, X turn
          return X
-    return max(x_counter, o_counter)
+    return min(x_counter, o_counter)
 
 def actions(board):
     """
@@ -42,7 +42,7 @@ def actions(board):
     """
     actions = set()
 
-    for row in board :
+    for row in board :                                 # Checks for empty cells
          for col in board[row] :
               if board[row][col] == EMPTY :
                    actions += (row, col)
@@ -59,7 +59,7 @@ def result(board, action):
          raise ValueError
     played_board = copy.deepcopy(board)                 # deepocopy the board for MiniMax
     played_board[action[0]][action[1]] = player(board)  # implement player action on the board 
-    return played_board                                 
+    return played_board                                
 
 
 def winner(board):
@@ -91,10 +91,10 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    if winner(board) != None and EMPTY in board :
-         return True
-    else :
+    if winner(board) == None or EMPTY in board : # For the game to end, rather a winner or no space left
          return False
+    else :
+         return True
     
 
 
