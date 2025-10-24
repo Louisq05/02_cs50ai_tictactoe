@@ -69,19 +69,22 @@ def winner(board):
     # ROWS
     for i in range(len(board)) :                                               # For each row
          if board[i][0] == board[i][1] == board[i][2] == X :# If the row is complete with Xs
+              print(1)
               return X                          # X wins
          if board[i][0] == board[i][1] == board[i][2] == O :   # If the row is complete with Os
               return O                          # O wins
     # COLUMNS
     for i in range(len(board[0])) :
          if board[0][i] == board[1][i] == board[2][i] == X :   # If the column is complete with Xs
+              print(2)
               return X                          # X wins
          if board[0][i] == board[1][i] == board[2][i] == O :   # If the column is complete with Os
-              return X                          # O wins
+              return O                         # O wins
     # DIAGONALS
-    if board[0][0] == board[1][1] == board[2][2] or board[0][2] == board[1][1] == board[2][0] == X : # If one diag is complete with Xs
+    if board[0][0] == board[1][1] == board[2][2] == X or board[0][2] == board[1][1] == board[2][0] == X : # If one diag is complete with Xs
+        print(3)
         return X                                # X wins
-    if board[0][0] == board[1][1] == board[2][2] or board[0][2] == board[1][1] == board[2][0] == O : # If one diag is complete with Xs
+    if board[0][0] == board[1][1] == board[2][2] == O or board[0][2] == board[1][1] == board[2][0] == O : # If one diag is complete with Xs
         return O                                # O wins
     # NO WINNER
     return None 
@@ -91,10 +94,13 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    if winner(board) == None or EMPTY in board : # For the game to end, rather a winner or no space left
-         return False
+    if winner(board) == False :
+     for row in range(len(board)) :
+          for col in range(len(board[0])) :
+               if board[row][col] == EMPTY :
+                    return False
     else :
-         return True
+         return winner(board)
     
 
 
