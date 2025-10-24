@@ -26,8 +26,8 @@ def player(board):
     x_counter = 0
     o_counter = 0
 
-    for row in board :                       # Counts the numer of symbols on the board
-        for col in board[row] :
+    for row in range(len(board)) :                       # Counts the numer of symbols on the board
+        for col in range(len(board[row])) :
             if board[row][col] == X :
                         x_counter += 1
             elif board[row][col] == O :
@@ -67,16 +67,16 @@ def winner(board):
     Returns the winner of the game, if there is one.
     """
     # ROWS
-    for row in board :                                          # For each row
-         if board[row][0] == board[row][1] == board[row][2] == X :   # If the row is complete with Xs
+    for i in range(len(board)) :                                               # For each row
+         if board[i][0] == board[i][1] == board[i][2] == X :# If the row is complete with Xs
               return X                          # X wins
-         if board[row][0] == board[row][1] == board[row][2] == O :   # If the row is complete with Os
+         if board[i][0] == board[i][1] == board[i][2] == O :   # If the row is complete with Os
               return O                          # O wins
     # COLUMNS
-    for col in board[0] :
-         if board[0][col] == board[1][col] == board[2][col] == X :   # If the column is complete with Xs
+    for i in range(len(board[0])) :
+         if board[0][i] == board[1][i] == board[2][i] == X :   # If the column is complete with Xs
               return X                          # X wins
-         if board[0][col] == board[1][col] == board[2][col] == O :   # If the column is complete with Os
+         if board[0][i] == board[1][i] == board[2][i] == O :   # If the column is complete with Os
               return X                          # O wins
     # DIAGONALS
     if board[0][0] == board[1][1] == board[2][2] or board[0][2] == board[1][1] == board[2][0] == X : # If one diag is complete with Xs
