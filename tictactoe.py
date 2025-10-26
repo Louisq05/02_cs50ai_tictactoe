@@ -40,15 +40,14 @@ def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
-    actions = set()
+    possibleActions = set()
 
-    for row in board :                                 # Checks for empty cells
-         for col in board[row] :
-              if board[row][col] == EMPTY :
-                   actions += (row, col)
-    if len(actions) == 0 :
-         return
-    return actions                                      # action[0] = row | action[1] = col
+    for i in range(0, len(board)):
+        for j in range(0, len(board[0])):
+            if board[i][j] == EMPTY:
+                possibleActions.add((i, j))
+
+    return possibleActions                                      # action[0] = row | action[1] = col
 
 
 def result(board, action):
@@ -120,4 +119,44 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+    if terminal(board):
+        return None
+    else:
+        if player(board) == X:
+            value, move = max_value(board)
+            return move
+        else:
+            value, move = min_value(board)
+            return move
+        
+def max_value(board):
+    if terminal(board):
+        return utility(board), None
+
+    v = float('-inf')
+    move = None
+    for action in actions(board):
+        aux, act = min_value(result(board, action))
+        if aux > v:
+            v = aux
+            move = action
+            if v == 1:
+                return v, move
+
+    return v, move
+
+def min_value(board):
+    if terminal(board):
+        return utility(board), None
+
+    v = float('inf')
+    move = None
+    for action in actions(board):
+        aux, act = max_value(result(board, action))
+        if aux < v:
+            v = aux
+            move = action
+            if v == -1:
+                return v, move
+
+    return v, move
