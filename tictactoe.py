@@ -5,12 +5,11 @@ Tic Tac Toe Player
 import math
 import copy
 
-# Initialing the game variables
 X = "X"
 O = "O"
 EMPTY = None
 
-# Initialing the board as empty
+
 def initial_state():
     """
     Returns starting state of the board.
@@ -23,18 +22,21 @@ def player(board):
     """
     Returns player who has the next turn on a board.
     """
-    x_counter = 0
-    o_counter = 0
+    X_counter = 0
+    O_counter = 0
 
-    for row in range(len(board)) :                       # Counts the numer of symbols on the board
-        for col in range(len(board[row])) :
-            if board[row][col] == X :
-                        x_counter += 1
-            elif board[row][col] == O :
-                        o_counter += 1
-    if x_counter == o_counter :              # If == 0 or same number, X turn
-         return X
-    return min(x_counter, o_counter)
+    for i in range(0, len(board)):
+        for j in range(0, len(board[0])):
+            if board[i][j] == X:
+                X_counter += 1
+            elif board[i][j] == O:
+                O_counter += 1
+    if X_counter > O_counter :
+        return O
+    return X
+
+
+
 
 def actions(board):
     """
@@ -47,72 +49,70 @@ def actions(board):
             if board[i][j] == EMPTY:
                 possibleActions.add((i, j))
 
-    return possibleActions                                      # action[0] = row | action[1] = col
+    return possibleActions
 
 
 def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    if not action : 
-         raise ValueError
-    played_board = copy.deepcopy(board)                 # deepocopy the board for MiniMax
-    played_board[action[0]][action[1]] = player(board)  # implement player action on the board 
-    return played_board                                
+    # Create new board, without modifying the original board received as input
+    result = copy.deepcopy(board)
+    result[action[0]][action[1]] = player(board)
+    return result
 
 
 def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
-    # ROWS
-    for i in range(len(board)) :                                               # For each row
-         if board[i][0] == board[i][1] == board[i][2] == X :# If the row is complete with Xs
-              print(1)
-              return X                          # X wins
-         if board[i][0] == board[i][1] == board[i][2] == O :   # If the row is complete with Os
-              return O                          # O wins
-    # COLUMNS
-    for i in range(len(board[0])) :
-         if board[0][i] == board[1][i] == board[2][i] == X :   # If the column is complete with Xs
-              print(2)
-              return X                          # X wins
-         if board[0][i] == board[1][i] == board[2][i] == O :   # If the column is complete with Os
-              return O                         # O wins
-    # DIAGONALS
-    if board[0][0] == board[1][1] == board[2][2] == X or board[0][2] == board[1][1] == board[2][0] == X : # If one diag is complete with Xs
-        print(3)
-        return X                                # X wins
-    if board[0][0] == board[1][1] == board[2][2] == O or board[0][2] == board[1][1] == board[2][0] == O : # If one diag is complete with Xs
-        return O                                # O wins
-    # NO WINNER
-    return None 
+    # Check rows
+    if all(i == board[0][0] for i in board[0]):
+        return board[0][0]
+    elif all(i == board[1][0] for i in board[1]):
+        return board[1][0]
+    elif all(i == board[2][0] for i in board[2]):
+        return board[2][0]
+    # Check columns
+    elif board[0][0] == board[1][0] and board[1][0] == board[2][0]:
+        return board[0][0]
+    elif board[0][1] == board[1][1] and board[1][1] == board[2][1]:
+        return board[0][1]
+    elif board[0][2] == board[1][2] and board[1][2] == board[2][2]:
+        return board[0][2]
+    # Check diagonals
+    elif board[0][0] == board[1][1] and board[1][1] == board[2][2]:
+        return board[0][0]
+    elif board[0][2] == board[1][1] and board[1][1] == board[2][0]:
+        return board[0][2]
+    else:
+        return None
 
 
 def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    if winner(board) == False :
-     for row in range(len(board)) :
-          for col in range(len(board[0])) :
-               if board[row][col] == EMPTY :
-                    return False
-    else :
-         return winner(board)
-    
+
+    if winner(board) is not None :
+        return True
+    elif not any(EMPTY in row for row in board) :
+        return True
+    else:
+        return False
 
 
 def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-    if winner(board) == X :
-         return 1           # If X wins, utility = 1
-    elif winner(board) == O :
-         return -1          # Elif O wins, utility = -1
-    else :
-         return 0           # Else, utility = 0
+
+    if winner(board) == X:
+        return 1
+    elif winner(board) == O:
+        return -1
+    else:
+        return 0
 
 
 def minimax(board):
@@ -128,7 +128,7 @@ def minimax(board):
         else:
             value, move = min_value(board)
             return move
-        
+
 def max_value(board):
     if terminal(board):
         return utility(board), None
